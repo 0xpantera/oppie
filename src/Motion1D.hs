@@ -13,4 +13,16 @@ type VelocityFunc = Time -> Velocity
 type Derivative = (R -> R) -> R -> R
 
 derivative :: R -> Derivative
-derivative dt x t = (x (t + dt/2) - x(t - dt/2)) / dt
+derivative dt pos t = (pos (t + dt/2) - pos (t - dt/2)) / dt
+
+carPosition :: Time -> Position
+carPosition t = cos t
+
+carVelocity :: Time -> Velocity
+carVelocity = derivative 0.01 carPosition
+
+velFromPos :: R                  -- dt
+           -> (Time -> Position) -- position function
+           -> (Time -> Velocity) -- velocity function
+velFromPos dt pos = derivative dt pos
+
