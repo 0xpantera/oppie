@@ -26,3 +26,6 @@ velFromPos :: R                  -- dt
            -> (Time -> Velocity) -- velocity function
 velFromPos dt pos = derivative dt pos
 
+positionCV :: Position -> Velocity -> Time -> Position
+positionCV x0 v0 t = x0 + v0 * t
+
