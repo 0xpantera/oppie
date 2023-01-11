@@ -66,6 +66,9 @@ library
     -- Base language which the package is written in.
     default-language: Haskell2010
 
+    -- GHC options used by the compiler when compiling this package.
+    ghc-options: -O2 -Wall
+
 executable oppie
     -- .hs or .lhs file containing the Main module.
     main-is:          Main.hs
@@ -86,6 +89,9 @@ executable oppie
 
     -- Base language which the package is written in.
     default-language: Haskell2010
+
+    -- GHC options used by the compiler when compiling this package.
+    ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N
 
 test-suite oppie-test
     -- Base language which the package is written in.
