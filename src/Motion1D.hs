@@ -72,3 +72,18 @@ integralN' :: Int -> Integration
 integralN' n f a b =
     integral dt f a b
     where dt = (b - a) / fromIntegral n
+
+oneStep :: R        -- time step
+        -> (R -> R) -- function to integrate
+        -> (R,R)    -- current (t,y)
+        -> (R,R)    -- updated (t,y)
+oneStep dt f (t,y) = let t' = t + dt
+                         y' = y + dt * f t
+                     in (t',y')
+
+integral' :: R -> Integration
+integral' dt f a b = 
+    snd $ 
+    head $ 
+    dropWhile ((< b) . fst) $ 
+    iterate (oneStep dt f) (a + dt/2, 0)                  
