@@ -6,6 +6,11 @@ type PosVec = Vec
 type Velocity = Vec
 type Acceleration = Vec
 
+type VecDerivative = (R -> Vec) -> R -> Vec
+
+vecDerivative :: R -> VecDerivative
+vecDerivative dt v t = (v (t + dt/2) ^-^ v (t - dt/2)) ^/ dt
+
 data Vec = Vec { xComp :: R -- x component
                , yComp :: R -- y component
                , zComp :: R -- z component
@@ -30,11 +35,11 @@ vec = Vec
 -- names borrowed from Conal Elliott's vector-space package
 infixl 6 ^+^
 infixl 6 ^-^
-infixl 7 *^
+infixr 7 *^
 infixl 7 ^*
 infixr 7 ^/
 infixr 7 <.>
-infixr 7 ><
+infixl 7 ><
 
 -- unit vectors in the x, y, and z directions
 iHat :: Vec
@@ -90,3 +95,23 @@ Vec ax ay az ^/ c = vec (ax / c) (ay / c) (az / c)
 -- magnitude of a vector
 magnitude :: Vec -> R
 magnitude v = sqrt (v <.> v)
+
+velFromPosV :: R                  -- dt
+            -> (Time -> PosVec)   -- position function
+            -> (Time -> Velocity) -- velocity function
+velFromPosV = vecDerivative
+
+accFromVelV :: R                      -- dt
+            -> (Time -> Velocity)     -- velocity function
+            -> (Time -> Acceleration) -- acceleration function
+accFromVelV = vecDerivative
+
+positionCVV :: PosVec -> Velocity -> Time -> PosVec
+positionCVV r0 v0 t = r0 ^+^ v0 ^* t
+
+velocityCAV :: Velocity -> Acceleration -> Time -> Velocity
+velocityCAV v0 a0 t = v0 ^+^ a0 ^* t
+
+positionCAV :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
+positionCAV r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
+
