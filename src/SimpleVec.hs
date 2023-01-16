@@ -24,7 +24,7 @@ showDouble x
 vec :: R -- x component
     -> R -- y component
     -> R -- z component
-    -> Vec x y z
+    -> Vec
 vec = Vec
 
 -- names borrowed from Conal Elliott's vector-space package
@@ -36,4 +36,57 @@ infixr 7 ^/
 infixr 7 <.>
 infixr 7 ><
 
--- TODO: define operators for vectors
+-- unit vectors in the x, y, and z directions
+iHat :: Vec
+iHat = vec 1 0 0
+
+jHat :: Vec
+jHat = vec 0 1 0
+
+kHat :: Vec
+kHat = vec 0 0 1
+
+-- zero vector
+zeroV :: Vec
+zeroV = vec 0 0 0
+
+negateV :: Vec -> Vec
+negateV (Vec x y z) = vec (-x) (-y) (-z)
+
+-- vector addition
+(^+^) :: Vec -> Vec -> Vec
+Vec ax ay az ^+^ Vec bx by bz  = 
+    vec (ax + bx) (ay + by) (az + bz)
+
+-- vector subtraction
+(^-^) :: Vec -> Vec -> Vec
+Vec ax ay az ^-^ Vec bx by bz = 
+    vec (ax - bx) (ay - by) (az - bz)
+
+sumV :: [Vec] -> Vec
+sumV = foldr (^+^) zeroV
+
+-- scalar multiplication
+(*^) :: R -> Vec -> Vec
+c *^ Vec ax ay az = vec (c * ax) (c * ay) (c * az)
+
+-- scalar multiplication
+(^*) :: Vec -> R -> Vec
+(^*) = flip (*^)
+
+-- dot product
+(<.>) :: Vec -> Vec -> R
+Vec ax ay az <.> Vec bx by bz = ax * bx + ay * by + az * bz
+
+-- cross product
+(><) :: Vec -> Vec -> Vec
+Vec ax ay az >< Vec bx by bz = 
+    vec (ay * bz - az * by) (az * bx - ax * bz) (ax * by - ay * bx)
+
+-- scalar division
+(^/) :: Vec -> R -> Vec
+Vec ax ay az ^/ c = vec (ax / c) (ay / c) (az / c)
+
+-- magnitude of a vector
+magnitude :: Vec -> R
+magnitude v = sqrt (v <.> v)
