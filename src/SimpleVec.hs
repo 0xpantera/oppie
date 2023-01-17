@@ -115,3 +115,12 @@ velocityCAV v0 a0 t = v0 ^+^ a0 ^* t
 positionCAV :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
 positionCAV r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
 
+aParallel :: Vec -> Vec -> Vec
+aParallel v a = let vHat = v ^/ magnitude v
+                in (vHat <.> a) *^ vHat
+
+aPerp :: Vec -> Vec -> Vec
+aPerp v a = let vHat = v ^/ magnitude v
+            in a ^-^ (vHat <.> a) *^ vHat
+            
+                       
