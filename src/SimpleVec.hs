@@ -109,18 +109,37 @@ accFromVelV = vecDerivative
 positionCVV :: PosVec -> Velocity -> Time -> PosVec
 positionCVV r0 v0 t = r0 ^+^ v0 ^* t
 
+-- constant acceleration equations
 velocityCAV :: Velocity -> Acceleration -> Time -> Velocity
 velocityCAV v0 a0 t = v0 ^+^ a0 ^* t
 
 positionCAV :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
 positionCAV r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
 
+-- parallel component a||(t)
+-- tangential component of acceleration
+-- responsible for change in speed of the object
 aParallel :: Vec -> Vec -> Vec
 aParallel v a = let vHat = v ^/ magnitude v
                 in (vHat <.> a) *^ vHat
 
+
+-- perpendicular component a_|_(t)
+-- radial or transverse component of acceleration
+-- responsible for change in direction of the object
 aPerp :: Vec -> Vec -> Vec
 aPerp v a = let vHat = v ^/ magnitude v
             in a ^-^ (vHat <.> a) *^ vHat
-            
-                       
+
+speedRateChange :: Vec -> Vec -> R
+speedRateChange v a = (v <.> a) / magnitude v
+
+radiusOfCurvature :: Vec -> Vec -> R
+radiusOfCurvature v a = (v <.> v) / magnitude (aPerp v a)
+
+-- Assume projectile accelerates only because of Earth's gravitational attraction
+-- projectile's acceleration is given by the acceleration of gravity
+-- g is a vector pointing towards the center of the earth with a magnitude of 9.81 m/s^2
+projectilePos :: PosVec -> Velocity -> Time -> PosVec
+projectilePos r0 v0 = positionCAV r0 v0 (9.81 *^ negateV kHat)
+
