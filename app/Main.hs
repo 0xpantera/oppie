@@ -34,9 +34,19 @@ plotCustom =
            , customLabel (1.5, 22) "Peak Height"
            , PNG "projectileLabel.png"
            , Key Nothing
-           ] tRange (yPos 0 20 (-9.8))                              
+           ] tRange (yPos 0 20 (-9.8))
+
+plotData :: IO ()
+plotData = 
+  plotPath [ Title "Projectile Motion"
+           , XLabel "Time (s)"
+           , YLabel "Height of projectile (m)"
+           , customLabel (1.5, 22) "Peak Height"
+           , PNG "projectileData.png"
+           , Key Nothing
+           ] [(t, yPos 0 20 (-9.8) t) | t <- tRange]                                         
 
 main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
-  plotCustom
+  plotData
