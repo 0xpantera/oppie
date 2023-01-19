@@ -44,9 +44,22 @@ plotData =
            , customLabel (1.5, 22) "Peak Height"
            , PNG "projectileData.png"
            , Key Nothing
-           ] [(t, yPos 0 20 (-9.8) t) | t <- tRange]                                         
+           ] [(t, yPos 0 20 (-9.8) t) | t <- tRange]
+
+xRange :: [R]
+xRange = [0, 0.02 .. 10]
+
+f3 :: R -> R
+f3 x = exp (-x)
+
+usePlotFuncs :: IO ()
+usePlotFuncs = plotFuncs [ XRange (-2, 8)
+                         , YRange (-0.2, 1)
+                         , PNG "multipleFuncs.png"
+                         , Key Nothing
+                         ] xRange [cos, sin, f3]
 
 main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
-  plotData
+  usePlotFuncs
